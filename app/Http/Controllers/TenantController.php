@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tenant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TenantController extends Controller
 {
@@ -42,6 +43,7 @@ class TenantController extends Controller
         $tenant->name = $request->name;
         $tenant->url = $request->url;
         $tenant->save();
+        DB::raw('CREATE DATABASE blog_multitenancy');
     }
 
     /**
