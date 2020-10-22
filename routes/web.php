@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('tenants', 'TenantController@store');
+Route::post('tenants', 'TenantController@store');

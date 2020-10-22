@@ -17,7 +17,7 @@ class TenantController extends Controller
     {
         //
         $tenants = Tenant::all();
-        return $tenants;
+        return view('index',['tenants',$tenants]);
     }
 
     /**
