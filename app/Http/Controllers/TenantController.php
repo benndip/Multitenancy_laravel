@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Tenant;
 use Illuminate\Http\Request;
+<<<<<<< Updated upstream
 use Illuminate\Support\Facades\DB;
+=======
+>>>>>>> Stashed changes
 
 class TenantController extends Controller
 {
@@ -15,9 +18,13 @@ class TenantController extends Controller
      */
     public function index()
     {
+<<<<<<< Updated upstream
         //
         $tenants = Tenant::all();
         return view('index',['tenants',$tenants]);
+=======
+
+>>>>>>> Stashed changes
     }
 
     /**
@@ -27,7 +34,12 @@ class TenantController extends Controller
      */
     public function create()
     {
+<<<<<<< Updated upstream
         //
+=======
+        //to show a form to create a new post  
+        return view('tenants.create');
+>>>>>>> Stashed changes
     }
 
     /**
@@ -39,11 +51,14 @@ class TenantController extends Controller
     public function store(Request $request)
     {
         //
+<<<<<<< Updated upstream
         $tenant = new Tenant;
         $tenant->name = $request->name;
         $tenant->url = $request->url;
         $tenant->save();
         DB::raw('CREATE DATABASE blog_multitenancy');
+=======
+>>>>>>> Stashed changes
     }
 
     /**
