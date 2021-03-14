@@ -2,29 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tenant;
+use App\Models\Subdomain;
 use Illuminate\Http\Request;
-<<<<<<< Updated upstream
 use Illuminate\Support\Facades\DB;
-=======
->>>>>>> Stashed changes
+use App\Database\OTF;
+use Illuminate\Support\Facades\Artisan;
+use App\Models\House;
 
 class TenantController extends Controller
 {
+    public function __construct() {
+        $this->middleware('switch-db', ['only' => 'index']);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($company_name)
     {
-<<<<<<< Updated upstream
-        //
-        $tenants = Tenant::all();
-        return view('index',['tenants',$tenants]);
-=======
-
->>>>>>> Stashed changes
+        $houses = House::all();
+        // $company = Company::findOrFail($company_name);
+        // $users = User::where('company_id', $company->id)->get();
+        return view('index',
+            [
+                'company_name' => $company_name, 
+                'houses' => $houses
+            ]
+        );
     }
 
     /**
@@ -34,12 +39,7 @@ class TenantController extends Controller
      */
     public function create()
     {
-<<<<<<< Updated upstream
         //
-=======
-        //to show a form to create a new post  
-        return view('tenants.create');
->>>>>>> Stashed changes
     }
 
     /**
@@ -51,14 +51,30 @@ class TenantController extends Controller
     public function store(Request $request)
     {
         //
-<<<<<<< Updated upstream
-        $tenant = new Tenant;
-        $tenant->name = $request->name;
-        $tenant->url = $request->url;
+        $this->validate($request, [
+            'sub_domain' => 'required|unique:subdomains,sub_domain'
+        ]);
+
+        $existingSubDomain = Subdomain::where('sub_domain', $request->sub_domain)->first(); 
+        if($existingSubDomain) {
+            // flash error
+            $request->session()->flash('alert-danger', 'Subdomain already taken. Please choose another one');
+            return redirect()->back();
+        }
+
+        $tenant = new Subdomain;
+        $tenant->sub_domain = $request->sub_domain;
+        $tenant->url = $request->sub_domain . ".benndip.me";
         $tenant->save();
-        DB::raw('CREATE DATABASE blog_multitenancy');
-=======
->>>>>>> Stashed changes
+
+        
+
+        $db_name =  "tenant_" . $request->sub_domain;
+        DB::statement("CREATE DATABASE ".$db_name.";");   
+        $otf = new OTF(['database' => $db_name]);
+        Artisan::call('migrate', array('--database'=>$db_name));
+        Artisan::call('db:seed', array('--database'=>$db_name));
+        return redirect('http://' . $request->sub_domain . '.benndip.me/welcome');
     }
 
     /**

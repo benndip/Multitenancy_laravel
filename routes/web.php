@@ -15,4 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('tenants', 'TenantController@store');
+Route::domain('{company_name}.benndip.me')->group(function () {
+    Route::get('welcome', 'TenantController@index');
+});
+
+Route::post('create_new_tenants', 'TenantController@store');
+Route::get('tenants', 'TenantController@index');
+Route::get('tenants', 'TenantController@index');
